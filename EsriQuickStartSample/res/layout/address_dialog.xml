@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dp" >
+
+    <EditText
+        android:id="@+id/yourAddress"
+        android:layout_width="fill_parent"
+        android:layout_height="67dp"
+        android:hint="Your current location"
+        android:textColor="#FFF" />
+
+    <EditText
+        android:id="@+id/destinationAddress"
+        android:layout_width="fill_parent"
+        android:layout_height="67dp"
+        android:layout_below="@id/yourAddress"
+        android:ems="10"
+        android:hint="700 E. Main, San Fransisco, CA"
+        android:textColor="#FFF" />
+
+    <Button
+        android:id="@+id/directionsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/destinationAddress"
+        android:drawableLeft="@drawable/carred32"/>
+
+    <Button
+        android:id="@+id/closeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/directionsButton"
+        android:layout_toRightOf="@+id/directionsButton"
+        android:drawableLeft="@drawable/circlex32" />
+
+</RelativeLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EsriQuickStart</string>
+    <string name="map_choices">Choose One</string>
+    <string name="draw_choices">Choose One</string>
+    <string name="mainLabel_text">Single tap on map or enter address.</string>  
+    <string name="findAddressLabel_text">e.g. Denver, CO</string>  
+    <string name="executeGeocodeButton_text">Search</string>
+    <string name="drawSpinner_text">Draw</string>
+    <string name="clearButton_text">Clear</string>
+    <string name="goDirectionsButton_text">Directions</string>
+    <string name="shareButton_text">Share</string>
+    <string name="restartGPS_text">Restart GPS</string>
+</resources>

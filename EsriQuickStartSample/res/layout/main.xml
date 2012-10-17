@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical"
+    android:layout_width="fill_parent" android:layout_height="wrap_content" 
+    android:padding="10dp">    
+    <EditText android:id="@+id/addressText" android:layout_width="fill_parent" android:textSize="20sp"
+        android:layout_height="wrap_content" android:background="@android:drawable/editbox_background"
+        android:hint="@string/findAddressLabel_text"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/executeGeocode"/>
+    
+    <TextView android:id="@+id/label2" android:layout_width="wrap_content" android:textSize="20sp"
+        android:layout_height="wrap_content"  
+        android:layout_below="@+id/addressText"/>
+    
+    <ImageView
+        android:id="@+id/executeGeocode"
+        android:contentDescription="@string/executeGeocodeButton_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"            
+        android:layout_alignParentRight="true" 
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingTop="8dip"
+        android:paddingRight="8dip"
+        android:paddingBottom="8dip"
+        android:src="@drawable/magnify32"/>    
+
+    <Spinner 
+        android:id="@+id/mapSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/addressText"
+        android:drawSelectorOnTop="true"
+        android:prompt="@string/map_choices"/>        
+      
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"
+        android:maxWidth="50dip"
+        android:minWidth="50dip"
+        android:maxHeight="50dip"
+        android:minHeight="50dip"
+        android:layout_centerHorizontal="true"
+        android:indeterminate="true" />    
+   
+    <ImageView
+        android:id="@+id/drawSpinner"
+        android:contentDescription="@string/drawSpinner_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"            
+        android:layout_below="@+id/addressText"
+        android:layout_toLeftOf="@+id/restartGPS"        
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingTop="8dip"
+        android:paddingRight="8dip"
+        android:paddingBottom="10dip"
+        android:src="@drawable/pencil40"/>            
+  
+    <ImageView
+        android:id="@+id/clearbutton"
+        android:contentDescription="@string/clearButton_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"            
+        android:layout_below="@+id/addressText"
+        android:layout_toLeftOf="@+id/drawSpinner"        
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingTop="12dip"
+        android:paddingRight="8dip"
+        android:paddingBottom="2dip"
+        android:src="@drawable/trashcan40"/>    
+    
+    <com.esri.android.map.MapView 
+        android:id="@+id/map" android:layout_height="fill_parent"
+        android:layout_width="fill_parent" 
+        android:layout_below="@id/mapSpinner"/>
+     <!-- 
+    <Button android:id="@+id/goDirections"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/goDirectionsButton_text"
+        android:layout_alignBottom="@id/map"/>
+    -->
+    <ImageView
+            android:id="@+id/restartGPS"
+            android:contentDescription="@string/restartGPS_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"            
+	        android:layout_below="@+id/addressText"
+	        android:layout_alignParentRight="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingTop="8dip"
+            android:paddingRight="8dip"
+            android:paddingBottom="8dip"
+            android:src="@drawable/location32"/>
+       
+	<ImageView
+	    android:id="@+id/share"
+	    android:contentDescription="@string/shareButton_text"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"            
+	    android:layout_below="@+id/addressText"
+	    android:layout_toLeftOf="@+id/clearbutton"
+	    android:clickable="true"
+	    android:focusable="true"
+	    android:paddingTop="8dip"
+	    android:paddingRight="12dip"
+	    android:paddingBottom="dip"
+	    android:src="@drawable/mail32"/>
+        
+    <Button  android:id="@+id/test"
+        android:layout_below="@+id/map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test"/>
+                 
+</RelativeLayout>
