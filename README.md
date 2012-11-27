@@ -1,41 +1,32 @@
-QuickStart-Android
+quickstart-map-android
 ==================
 
 A library and sample app to get started with Esri's Android Runtime SDK.
 
-See the repo's wiki for additional details: https://github.com/Esri/QuickStart-Android/wiki
-
-# add-shapefile-js
-
-This ArcGIS JavaScript sample let's you navigate to a local .zip file add a shapefile to your web map. It uses the Portal API REST Generate method to create features that can be loaded into a web map application.  Learn more [here](http://help.arcgis.com/en/webapi/javascript/arcgis/help/jssamples_start.htm#jssamples/portal_addshapefile.html).
-
-[View live here](http://help.arcgis.com/en/webapi/javascript/arcgis/samples/portal_addshapefile/index.html)
-
-![App](https://raw.github.com/Esri/add-shapefile-js/master/add-shapefile.png)
+See the repo's wiki for additional details: https://github.com/Esri/quickstart-map-android/wiki
 
 ## Features
-* ArcGIS Javascript and Portal API
-* Uses REST Generate operation to create a feature collection from the zipped shapefile 
-* Applies symbols
-* Adds features to map
+* Simplifies common coding patterns down to one or a couple of lines of code
+* Goes beyond the SDK samples in demonstrating best practices for building mapping applications on Android.
 
 ## Instructions
 
-1. Download and unzip the .zip file or clone the repo.
-2. Web-enable the directory or copy/paste the source to your own .html file.
-3. Access the .html page.
+1. Make sure you have installed both the Google Android SDK and the ArcGIS Runtime SDK for Android
+2. Download and unzip the .zip file or clone the repo.
+3. Create new project or import into Eclipse.
 
 [New to Github? Get started here.](https://github.com/)
 
 ## Requirements
 
-* Notepad or HTML editor
-* A little background with Javascript
-* Experience with the [ArcGIS Javascript API](http://www.esri.com/) would help.
+* Eclipse
+* Google Android SDK
+* ArcGIS Runtime SDK for Android
+* Experience with Java would help.
 
 ## Resources
 
-* [ArcGIS for JavaScript API Resource Center](http://help.arcgis.com/en/webapi/javascript/arcgis/index.html)
+* [ArcGIS Runtime SDK for Android Resource Center](http://resources.arcgis.com/en/communities/runtime-android/)
 * [ArcGIS Blog](http://blogs.esri.com/esri/arcgis/)
 * [twitter@esri](http://twitter.com/esri)
 
