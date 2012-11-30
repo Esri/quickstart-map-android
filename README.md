@@ -15,7 +15,7 @@ See the repo's wiki for additional details: https://github.com/Esri/quickstart-m
 2. Download and unzip the .zip file or clone the repo.
 3. Create new project or import into Eclipse.
 
-[New to Github? Get started here.](https://github.com/)
+[New to Github? Get started here.](http://htmlpreview.github.com/?https://github.com/Esri/esri.github.com/blob/master/help/esri-getting-to-know-github.html)
 
 ## Requirements
 
