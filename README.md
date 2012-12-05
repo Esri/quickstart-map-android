@@ -1,7 +1,7 @@
 quickstart-map-android
 ==================
 
-A library and sample app to get started with Esri's Android Runtime SDK.
+A library, sample app and starter template for getting started with Esri's Android Runtime SDK.
 
 See the repo's wiki for additional details: https://github.com/Esri/quickstart-map-android/wiki
 
@@ -10,6 +10,8 @@ See the repo's wiki for additional details: https://github.com/Esri/quickstart-m
 ## Features
 * Simplifies common coding patterns down to one or a couple of lines of code
 * Goes beyond the SDK samples in demonstrating best practices for building mapping applications on Android.
+* Includes EsriQuickStart library project, fully functional sample app, and a Hello World template app that you can quickly build upon.
+* As of Version 1.1 the library project and associated jar file contain the Javadoc.
 
 ## Instructions
 
