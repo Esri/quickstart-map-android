@@ -58,7 +58,7 @@ import com.esri.core.tasks.ags.geocode.LocatorReverseGeocodeResult;
  * in your Activities.
  * 
  * @author Andy Gup
- * @version 1.0
+ * @version 1.1
  */
 public class EsriQuickStart extends MapView {
 	
@@ -76,13 +76,15 @@ public class EsriQuickStart extends MapView {
 	
 	private MyTouchListener _myTouchListener;	
 	
-	private LocationService _locationService;
+	private LocationService _locationService = null;
+	private LocationManager _locationManager = null;
+	private LocationListener _locationListener = null;
 	private Location _lastKnownLocation = null;
 	private Location _networkProviderLocation = null;	
 	
 	private EsriQuickStartEvent QSEvent;
 	
-	private Double _center_lat;
+	private Double _center_lat; 
 	private Double _center_lon;
 	private Double _center_scale;
 	
@@ -296,7 +298,7 @@ public class EsriQuickStart extends MapView {
 	/**
 	 * Internal method handling MapView and Layer status change events.
 	 * @param status
-	 * @param source
+	 * @param mapType
 	 */
 	private void handleStatusEvent(OnStatusChangedListener.STATUS status, MapType mapType){
 		if (OnStatusChangedListener.STATUS.INITIALIZED == status){
@@ -580,17 +582,28 @@ public class EsriQuickStart extends MapView {
 	 * It is almost always better to use delayedStartLocation() to guarantee that map is loaded first and LocationService
 	 * has fully initialized and all its listeners have been enabled.
 	 * @throws LOCATION_EXCEPTION if unable to shutdown the LocationService
-	 * @see delayedStartLocation for thread safe starting after an Activity change
+	 * @see delayedStartLocationService for thread safe starting after an Activity change
 	 */
 	public void startLocationService(){
 		try{
 			if(_locationService.isStarted() == false){
 				_locationService.start();
+				Location loc = new Location("null"); 
+				QSEvent.dispatchLocationChangedEvent(new EsriQuickStartEvent(MapViewEventType.LOCATION_INITIALIZED),loc);	
 			}
 		}
 		catch(Exception exc){
 			Log.d("EsriQuickStartLib","EsriQuickStartLib startLocation() unable to start. " + exc.toString());
 		}
+	}
+	
+	/**
+	 * Internal method for killing of all location listeners and managers
+	 */
+	private void shutdownAllLocation(){
+		_locationManager.removeUpdates(_locationListener);
+		_locationManager = null;
+		_locationService = null;
 	}
 	
 	/**
@@ -600,10 +613,15 @@ public class EsriQuickStart extends MapView {
 	 */
 	public void stopLocationService(final Boolean... silent){
 
-		try{
-			if(_locationService.isStarted() == true){
-				_locationService.stop();
+		if(_locationService != null){
+			try{
+				if(_locationService.isStarted() == true){
+					_locationService.stop();
+				}
+
 				if(_locationService.isStarted() == false){
+					//Be sure to kill off all location listeners and managers
+					shutdownAllLocation();										
 					Log.d("EsriQuickStartLib","EsriQuickStartLib stopLocation() LocationService has stopped.");
 					if(silent == null || silent.length == 0){
 						QSEvent.dispatchLocationShutdownEvent(new EsriQuickStartEvent(MapViewEventType.LOCATION_SHUTDOWN), "LocationService stopped via stopLocation() request");
@@ -623,10 +641,15 @@ public class EsriQuickStart extends MapView {
 								public void run() {
 									counter++;
 									try{
+										_locationService.stop();
 										boolean test = _locationService.isStarted();
 										Log.d("EsriQuickStartLib","EsriQuickStartLib stopLocation(): attempting to run stopLocation(). Attempt #" + counter);
 										
 										if(test == false){
+											
+											//Be sure to kill off all location listeners and managers
+											shutdownAllLocation();
+											
 											Log.d("EsriQuickStartLib","EsriQuickStartLib stopLocation() LocationService has stopped.");
 											if(silent == null || silent.length == 0){
 												QSEvent.dispatchLocationShutdownEvent(new EsriQuickStartEvent(MapViewEventType.LOCATION_SHUTDOWN), "LocationService stopped via stopLocation() request");
@@ -653,12 +676,13 @@ public class EsriQuickStart extends MapView {
 					};
 					
 					task.run();
-				}
-			}					
-		}
-		catch(Exception exc){
-			Log.d("EsriQuickStartLib","EsriQuickStartLib stopLocation() unable to stop. " + exc.toString());
-			QSEvent.dispatchLocationExceptionEvent(new EsriQuickStartEvent(MapViewEventType.LOCATION_EXCEPTION),exc.toString());
+				}					
+			}
+			catch(Exception exc){
+				Log.d("EsriQuickStartLib","EsriQuickStartLib stopLocation() unable to stop. " + exc.toString());
+				QSEvent.dispatchLocationExceptionEvent(new EsriQuickStartEvent(MapViewEventType.LOCATION_EXCEPTION),exc.toString());
+			}
+			
 		}
 	}
 	
@@ -717,9 +741,7 @@ public class EsriQuickStart extends MapView {
 										//Snapshot mode true
 										setLocationListener(true, true,true);
 									}									
-									startLocationService();
-									Location loc = new Location("null"); 
-									QSEvent.dispatchLocationChangedEvent(new EsriQuickStartEvent(MapViewEventType.LOCATION_INITIALIZED),loc);	
+									//startLocationService();
 								}
 								else{
 									if(counter < 5){
@@ -765,13 +787,13 @@ public class EsriQuickStart extends MapView {
 	private void setLocationListener(boolean autoCenter,final boolean gpsSnapshotMode, boolean... autoStart){
 		boolean locationEnabled = isLocationEnabled();
 
-		LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+		_locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 		// Or use LocationManager.GPS_PROVIDER
-		Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		Location lastKnownLocation = _locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 			
 		// Define a listener that responds to location updates
 		//We use NETWORK_PROVIDER here to work around a bug in Esri LocationService.
-		LocationListener locationListener = new LocationListener() {
+		_locationListener = new LocationListener() {
 		    public void onLocationChanged(Location location) {
 		      // Called when a new location is found by the network location provider.
 		      _networkProviderLocation = location;
@@ -785,7 +807,7 @@ public class EsriQuickStart extends MapView {
 		  };
 
 		// Register the listener with the Location Manager to receive location updates
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, _locationListener);
 
 		//If possible use the last known location when map first launches
 		if(locationEnabled == false && lastKnownLocation != null){			
@@ -798,7 +820,7 @@ public class EsriQuickStart extends MapView {
 
 		final boolean _autoCenter = autoCenter; 
 		MapView mv = _mapView;
-		_locationService = _mapView.getLocationService();
+		_locationService = _mapView.getLocationService(); 
 		_locationService.setAutoPan(_autoCenter);	
 		_locationService.setLocationListener(new LocationListener() {
 			int counter = 0;
@@ -869,6 +891,8 @@ public class EsriQuickStart extends MapView {
 		
 		if(autoStart != null && autoStart[0] == true && locationEnabled == true){
 			_locationService.start();
+			Location loc = new Location("null"); 
+			QSEvent.dispatchLocationChangedEvent(new EsriQuickStartEvent(MapViewEventType.LOCATION_INITIALIZED),loc);	
 		}		
 				
 	}
@@ -932,13 +956,14 @@ public class EsriQuickStart extends MapView {
 	
 	
 	/**
-	 * Determines whether or not location via <code>GPS_PROVIDER</code> has been enabled on the device
+	 * Determines whether or not location via <code>GPS_PROVIDER</code> or <code>NETWORK_PROVIDER</code> has been enabled on the device
 	 * @return boolean
 	 */
 	public boolean isLocationEnabled(){
 		boolean enabled = false;
 		LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-		if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+		if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || 
+				locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
 			enabled = true;
 		}
 		
@@ -1004,7 +1029,12 @@ public class EsriQuickStart extends MapView {
 	 * @return boolean
 	 */
 	public boolean isLocationStarted(){
-		return _locationService.isStarted();
+		boolean test = false;
+		
+		if(_locationService != null){
+			if(_locationService.isStarted())test = true;
+		}
+		return test;
 	}
 	
 	/**
@@ -1218,7 +1248,7 @@ public class EsriQuickStart extends MapView {
 				 */
 				result = _addressLocator.reverseGeocode(point, 1000.00, sr, sr);
 			} catch (Exception e) { 
-				QSEvent.dispatchGeocodeEvent(new EsriQuickStartEvent(MapViewEventType.ADDRESS_EXCEPTION),(LocatorReverseGeocodeResult)null,e.toString());
+				QSEvent.dispatchGeocodeEvent(new EsriQuickStartEvent(MapViewEventType.REVERSEGEOCODE_ADDRESS_EXCEPTION),(LocatorReverseGeocodeResult)null,e.toString());
 			}
 			return result; 
 		}

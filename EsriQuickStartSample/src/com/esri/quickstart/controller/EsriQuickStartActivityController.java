@@ -35,6 +35,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import com.esri.android.map.Callout;
 import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.MapView;
+import com.esri.android.map.event.OnPanListener;
 import com.esri.android.map.event.OnSingleTapListener;
 import com.esri.core.geometry.Geometry;
 import com.esri.core.geometry.Point;
@@ -259,13 +260,42 @@ public class EsriQuickStartActivityController {
 	}	
 	
 	/**
-	 * Encapsulates initializing the OnSingleTapListener. Automatically initiates a find address request.
+	 * Encapsulates initializing various map listeners
 	 */
-	public void setSingleMapClickListener(){
-		// perform reverse geocode on single tap.
+	public void setMapListeners(){
+
+		_mapView.setOnPanListener(new OnPanListener() {
+			
+			private static final long serialVersionUID = 3350423096166771396L;
+
+			@Override
+			public void prePointerUp(float fromx, float fromy, float tox, float toy) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void prePointerMove(float fromx, float fromy, float tox, float toy) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void postPointerUp(float fromx, float fromy, float tox, float toy) {
+				if(_quickStartLib.isLocationStarted() == true){
+					_quickStartLib.stopLocationService();
+					_quickStartLib.displayToast("GPS disabled when you pan. Use button to restart.");
+					
+				}
+			}
+			
+			@Override
+			public void postPointerMove(float fromx, float fromy, float tox, float toy) {
+				// TODO
+			}
+		});
 		
-		
-		
+		// perform reverse geocode on single tap.		
 		_mapView.setOnSingleTapListener(new OnSingleTapListener() {
 
 			private static final long serialVersionUID = 1L;					
@@ -370,6 +400,7 @@ public class EsriQuickStartActivityController {
 			public void onLocationChangedEvent(EsriQuickStartEvent event,
 					Location location) {
 				String eventName = event.getSource().toString();
+				Log.d("test", "EsriQuickStart: " + eventName);
 				if(eventName.contains("INITIALIZED")){
 					//restartGPSButton.setVisibility(View.INVISIBLE);
 					restartGPSButton.setImageResource(R.drawable.location32yellow);
@@ -379,7 +410,14 @@ public class EsriQuickStartActivityController {
 			@Override
 			public void onAddressResultEvent(EsriQuickStartEvent event,
 					LocatorReverseGeocodeResult result, String exception) {
-				displayMapClickResults(result);
+				if(result != null){
+					displayMapClickResults(result);	
+				}
+				else if(exception != null)
+				{
+					_quickStartLib.displayToast("There was an address problem: " + exception);
+				}
+				
 			}
 			
 			@Override
@@ -390,10 +428,11 @@ public class EsriQuickStartActivityController {
 				if(result != null){	
 					addressResultsHandler(result);
 				}
-				else
+				else if(exception != null)
 				{
 					_quickStartLib.displayToast("There was an address problem: " + exception);
 				}
+
 			}
 
 		});

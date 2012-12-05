@@ -15,6 +15,10 @@ public enum MapViewEventType{
 	 */
 	REVERSEGEOCODE_ADDRESS_COMPLETE("Reverse geocode job complete."),
 	/**
+	 * Indicates the Locator was unable to complete the reverse geocode request. Check for messages.
+	 */
+	REVERSEGEOCODE_ADDRESS_EXCEPTION("There was a problem with the reverse geocode job."),
+	/**
 	 * The Locator was unable to complete the request. Check for messages.
 	 */
 	ADDRESS_EXCEPTION("There was a problem with the Locator job."),		

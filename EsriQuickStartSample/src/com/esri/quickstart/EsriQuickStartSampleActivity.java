@@ -11,7 +11,12 @@ import com.esri.quickstart.EsriQuickStart;
 import com.esri.quickstart.EsriQuickStart.MapType;
 import com.esri.quickstart.controller.EsriQuickStartActivityController;
 
-
+/**
+ * 
+ * @author Andy Gup
+ * @version 1.1
+ *
+ */
 public class EsriQuickStartSampleActivity extends Activity {
 	
 	ArcGISTiledMapServiceLayer tileLayer;
@@ -31,7 +36,7 @@ public class EsriQuickStartSampleActivity extends Activity {
 		
         _activityController = new EsriQuickStartActivityController(_esriQuickStartLib, this);
 		_activityController.setMapSpinner();		
-		_activityController.setSingleMapClickListener();		
+		_activityController.setMapListeners();		
     }
 
 	/**

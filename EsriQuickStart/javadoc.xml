@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="javadoc" name="API Documentation">
+    <target name="javadoc">
+        <javadoc access="public" author="true" 
+            classpath="C:\Program Files (x86)\Android\android-sdk-windows\platforms\android-8\android.jar;C:\Program Files (x86)\eclipse\configuration\org.eclipse.osgi\bundles\2057\1\.cp\lib\ArcGIS_Android.jar;C:\Program Files (x86)\eclipse\configuration\org.eclipse.osgi\bundles\2057\1\.cp\lib\jackson-mapper-lgpl-1.9.5.jar;C:\Program Files (x86)\eclipse\configuration\org.eclipse.osgi\bundles\2057\1\.cp\lib\jackson-core-lgpl-1.9.5.jar;C:\Program Files (x86)\Android\android-sdk-windows\tools\support\annotations.jar" 
+            destdir="C:\Users\andy4683\Documents\Eclipse\Sandbox\javadoc" 
+            nodeprecated="false" 
+            nodeprecatedlist="false" 
+            noindex="false" 
+            nonavbar="false" 
+            notree="false" 
+            packagenames="com.esri.quickstart" 
+            source="1.6" 
+            sourcepath="gen;src" 
+            splitindex="true" use="true" version="true">
+            <link href="file:/C:/Program Files (x86)/Android/android-sdk-windows/docs/reference"/>
+        </javadoc>
+    </target>
+</project>
