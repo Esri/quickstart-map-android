@@ -5,6 +5,8 @@ A library and sample app to get started with Esri's Android Runtime SDK.
 
 See the repo's wiki for additional details: https://github.com/Esri/quickstart-map-android/wiki
 
+![App](https://raw.github.com/Esri/quickstart-map-android/master/quickstart-android.png)
+
 ## Features
 * Simplifies common coding patterns down to one or a couple of lines of code
 * Goes beyond the SDK samples in demonstrating best practices for building mapping applications on Android.
