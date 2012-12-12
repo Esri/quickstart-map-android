@@ -15,7 +15,7 @@ See the repo's wiki for additional details: https://github.com/Esri/quickstart-m
 
 ## Instructions
 
-1. Make sure you have installed both the Google Android SDK and the ArcGIS Runtime SDK for Android
+1. Make sure you have installed both the [Google Android SDK](http://developer.android.com/sdk/index.html) and the [ArcGIS Runtime SDK for Android](http://resources.arcgis.com/en/help/android-sdk/concepts/0119/01190000002m000000.htm)
 2. Download and unzip the .zip file or clone the repo.
 3. Create new project or import into Eclipse.
 
@@ -23,10 +23,10 @@ See the repo's wiki for additional details: https://github.com/Esri/quickstart-m
 
 ## Requirements
 
-* Eclipse
-* Google Android SDK
-* ArcGIS Runtime SDK for Android
-* Experience with Java would help.
+* [Eclipse](http://www.eclipse.org/downloads/)
+* [Google Android SDK](http://developer.android.com/sdk/index.html)
+* [ArcGIS Runtime SDK for Android](http://resources.arcgis.com/en/help/android-sdk/concepts/0119/01190000002m000000.htm)
+* [Experience with Java would help.](http://developer.android.com/training/index.html)
 
 ## Resources
 
