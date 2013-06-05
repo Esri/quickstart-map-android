@@ -1,4 +1,4 @@
-package com.esri.quickstart;
+package com.esri.quickstartsample;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -9,7 +9,7 @@ import com.esri.android.map.ags.ArcGISTiledMapServiceLayer;
 
 import com.esri.quickstart.EsriQuickStart;
 import com.esri.quickstart.EsriQuickStart.MapType;
-import com.esri.quickstart.controller.EsriQuickStartActivityController;
+import com.esri.quickstartsample.controller.EsriQuickStartActivityController;
 
 /**
  * 
@@ -37,6 +37,17 @@ public class EsriQuickStartSampleActivity extends Activity {
         _activityController = new EsriQuickStartActivityController(_esriQuickStartLib, this);
 		_activityController.setMapSpinner();		
 		_activityController.setMapListeners();		
+    }
+    
+    /**
+     * Gracefully handle user hitting back button after starting up draw tool dialog
+     */
+    @Override
+    public void onBackPressed() {
+        _esriQuickStartLib.setDefaultTouchListener();
+    	Dialog dialog = _activityController.getAlertDialog();
+        dialog.dismiss();
+        return;
     }
 
 	/**

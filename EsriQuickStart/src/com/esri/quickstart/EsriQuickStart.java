@@ -1,8 +1,6 @@
 package com.esri.quickstart;
 
 import java.text.DecimalFormat;
-import java.util.EventListener;
-import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,9 +76,7 @@ public class EsriQuickStart extends MapView {
 	
 	private LocationService _locationService = null;
 	private LocationManager _locationManager = null;
-	private LocationListener _locationListener = null;
 	private Location _lastKnownLocation = null;
-	private Location _networkProviderLocation = null;	
 	
 	private EsriQuickStartEvent QSEvent;
 	
@@ -601,7 +597,6 @@ public class EsriQuickStart extends MapView {
 	 * Internal method for killing of all location listeners and managers
 	 */
 	private void shutdownAllLocation(){
-		_locationManager.removeUpdates(_locationListener);
 		_locationManager = null;
 		_locationService = null;
 	}
@@ -628,8 +623,9 @@ public class EsriQuickStart extends MapView {
 					}
 				}
 				else{
-					final Handler handler = new Handler();	
+	
 					Runnable task = new Runnable() {
+						final Handler handler = new Handler();
 						
 						@Override
 						public void run() {
@@ -675,7 +671,9 @@ public class EsriQuickStart extends MapView {
 						}	
 					};
 					
-					task.run();
+					//task.run();
+					Thread thread = new Thread(task);  
+					thread.start();
 				}					
 			}
 			catch(Exception exc){
@@ -705,10 +703,10 @@ public class EsriQuickStart extends MapView {
 	 * @throws LOCATION_INITIALIZED when LocationService is initialized but before start() is called.
 	 * @throws LOCATION_DELAYEDSTART_FAILURE if unable to start LocationService.
 	 */	
-	public void delayedStartLocationService(final boolean...gpsSnapshotMode){
-		final Handler handler = new Handler();		
+	public void delayedStartLocationService(final boolean...gpsSnapshotMode){	
 		
 		Runnable task = new Runnable() {
+			final Handler handler = new Handler();	
 			
 			@Override
 			public void run() {
@@ -768,7 +766,9 @@ public class EsriQuickStart extends MapView {
 			}
 		};
 		
-		task.run();
+		//task.run();
+		Thread thread = new Thread(task);
+		thread.start();
 	}
 	
 	/**
@@ -786,28 +786,21 @@ public class EsriQuickStart extends MapView {
 	 */
 	private void setLocationListener(boolean autoCenter,final boolean gpsSnapshotMode, boolean... autoStart){
 		boolean locationEnabled = isLocationEnabled();
+		Location lastKnownLocation = null;
 
 		_locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 		// Or use LocationManager.GPS_PROVIDER
-		Location lastKnownLocation = _locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			
-		// Define a listener that responds to location updates
-		//We use NETWORK_PROVIDER here to work around a bug in Esri LocationService.
-		_locationListener = new LocationListener() {
-		    public void onLocationChanged(Location location) {
-		      // Called when a new location is found by the network location provider.
-		      _networkProviderLocation = location;
-		    }
-
-		    public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-		    public void onProviderEnabled(String provider) {}
-
-		    public void onProviderDisabled(String provider) {}
-		  };
-
-		// Register the listener with the Location Manager to receive location updates
-		_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, _locationListener);
+		final Boolean networkProviderEnabled = _locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+		final Boolean gpsProviderEnabled = _locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+		if(networkProviderEnabled == true){
+			lastKnownLocation = _locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		}
+		else if(gpsProviderEnabled == true){
+			lastKnownLocation = _locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		}
+		else{
+			Log.d("EsriQuickStartLib", "IMPORTANT: Neither NETWORK_PROVIDER nor GPS_PROVIDER are available.");
+		}
 
 		//If possible use the last known location when map first launches
 		if(locationEnabled == false && lastKnownLocation != null){			
@@ -819,7 +812,7 @@ public class EsriQuickStart extends MapView {
 		}
 
 		final boolean _autoCenter = autoCenter; 
-		MapView mv = _mapView;
+
 		_locationService = _mapView.getLocationService(); 
 		_locationService.setAutoPan(_autoCenter);	
 		_locationService.setLocationListener(new LocationListener() {
@@ -1451,6 +1444,16 @@ public class EsriQuickStart extends MapView {
 		public void clearDrawGraphicsLayer(){
 			_drawGraphicsLayer.removeAll();
 		}
+		
+		/**
+		 * Clears ALL graphics.
+		 * Added at v1.2.
+		 */
+		public void clearAllGraphics(){
+			_drawGraphicsLayer.removeAll();
+			_pointsGraphicsLayer.removeAll();
+			
+		}
 
 		/*
 		 * Invoked when user single taps on the map view. This event handler
@@ -1475,6 +1478,7 @@ public class EsriQuickStart extends MapView {
 			return false;
 
 		}
+		
 
 		/*
 		 * Invoked when user drags finger across screen. Polygon or Polyline is
@@ -1484,40 +1488,36 @@ public class EsriQuickStart extends MapView {
 		 * android.view.MotionEvent)
 		 */
 		public boolean onDragPointerMove(MotionEvent from, MotionEvent to) {
-			if (drawType.equals(DrawType.POLYLINE) || drawType.equals(DrawType.POLYGON)) {
+			
+			if (drawType.equals(DrawType.POLYLINE)){
+				MultiPath polyline = new Polyline();
+				Point mapPt = _mapView.toMapPoint(to.getX(), to.getY());
+				startPoint = _mapView.toMapPoint(from.getX(), from.getY());
+				polyline.startPath((float) startPoint.getX(),
+						(float) startPoint.getY());
+
+				polyline.lineTo((float) mapPt.getX(), (float) mapPt.getY());
+				
+				_drawGraphicsLayer.addGraphic(new Graphic(polyline,new SimpleLineSymbol(Color.BLUE,5)));
+				
+				return true;
+			}
+			
+			if (drawType.equals(DrawType.POLYGON)) {
 				
 				Point mapPt = _mapView.toMapPoint(to.getX(), to.getY());
 
-				/*
-				 * if StartPoint is null, create a polyline and start a path.
-				 */
 				if (startPoint == null) {
 					_drawGraphicsLayer.removeAll();
-					poly = drawType.equals(DrawType.POLYLINE) ? new Polyline()
-							: new Polygon();
+					poly = new Polygon();
 					startPoint = _mapView.toMapPoint(from.getX(), from.getY());
 					poly.startPath((float) startPoint.getX(),
 							(float) startPoint.getY());
-
-					/*
-					 * Create a Graphic and add polyline geometry
-					 */
-					Graphic graphic = new Graphic(startPoint,new SimpleLineSymbol(Color.RED,5));
-
-					/*
-					 * add the updated graphic to graphics layer
-					 */
-					_drawGraphicsLayer.addGraphic(graphic);
 				}
-								
+
 				poly.lineTo((float) mapPt.getX(), (float) mapPt.getY());
 				
-				if(drawType.equals(DrawType.POLYGON)){
-					_drawGraphicsLayer.addGraphic(new Graphic(poly,_simpleFillSymbol));
-				}
-				else{
-					_drawGraphicsLayer.addGraphic(new Graphic(poly,new SimpleLineSymbol(Color.BLUE,5)));
-				}
+				_drawGraphicsLayer.addGraphic(new Graphic(poly,_simpleFillSymbol));
 				
 				return true;
 			}

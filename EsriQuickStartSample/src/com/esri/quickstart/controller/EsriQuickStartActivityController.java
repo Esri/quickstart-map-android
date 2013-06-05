@@ -1,4 +1,4 @@
-package com.esri.quickstart.controller;
+package com.esri.quickstartsample.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -49,7 +49,7 @@ import com.esri.quickstart.EsriQuickStart.DrawType;
 import com.esri.quickstart.EsriQuickStart.MapType;
 import com.esri.quickstart.EsriQuickStartEvent;
 import com.esri.quickstart.EsriQuickStartEventListener;
-import com.esri.quickstart.R;
+import com.esri.quickstartsample.R;
 
 public class EsriQuickStartActivityController {
 	
@@ -64,6 +64,7 @@ public class EsriQuickStartActivityController {
 	ProgressDialog _dialog = null;	
 	ProgressBar _progressBar;
 	private Callout _callout;
+	Dialog _alertDialog = null;
 	
 	Button goDirectionsButton;
 	ImageView restartGPSButton;
@@ -525,16 +526,16 @@ public class EsriQuickStartActivityController {
 	 */
 	@SuppressWarnings("unused")
 	public Dialog onCreateDialogHandler(int id){
-		Dialog dialog = null;
+		_alertDialog = null;
 		switch(id){
 			case OPEN_ADDRESS_WINDOW:
 				Context mContext = _activity;		
-				dialog = new Dialog(mContext);
-				dialog.setContentView(R.layout.address_dialog);
-				dialog.setTitle(" ");
-				dialog.setCancelable(true);
-				Button button = (Button)dialog.findViewById(R.id.closeButton);
-				final Dialog _tempDialog = dialog;
+				_alertDialog = new Dialog(mContext);
+				_alertDialog.setContentView(R.layout.address_dialog);
+				_alertDialog.setTitle(" ");
+				_alertDialog.setCancelable(true);
+				Button button = (Button)_alertDialog.findViewById(R.id.closeButton);
+				final Dialog _tempDialog = _alertDialog;
 				button.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
@@ -544,15 +545,15 @@ public class EsriQuickStartActivityController {
 	
 				break;
 			case CLOSE_ADDRESS_WINDOW:
-				if(dialog != null){
-					dialog.dismiss();
+				if(_alertDialog != null){
+					_alertDialog.dismiss();
 				}
 				break;
 				default: 
-					dialog =null;
+					_alertDialog =null;
 			case OPEN_DRAW_WINDOW:				
-				dialog = setDrawDialogBox();
-				dialog.show();
+				_alertDialog = setDrawDialogBox();
+				_alertDialog.show();
 				if(_quickStartLib != null){
 					_quickStartLib.setDrawTouchListener();
 					//Button clearButton = (Button) findViewById(R.id.clearbutton);
@@ -560,7 +561,7 @@ public class EsriQuickStartActivityController {
 				}
 				break;		
 		}
-		return dialog;
+		return _alertDialog;
 	}	
 	
 	/*
@@ -602,4 +603,12 @@ public class EsriQuickStartActivityController {
 		}
 
 	});	
+	
+	/**
+	 * Returns an instance of the AlertDialog which is used for providing draw tool options.
+	 * @return Dialog
+	 */
+	public Dialog getAlertDialog(){
+		return _alertDialog;
+	}
 }
