@@ -56,7 +56,7 @@ import com.esri.core.tasks.ags.geocode.LocatorReverseGeocodeResult;
  * in your Activities.
  * 
  * @author Andy Gup
- * @version 1.2
+ * @version 1.2.1
  */
 public class EsriQuickStart extends MapView {
 	
@@ -474,6 +474,30 @@ public class EsriQuickStart extends MapView {
 		
 		//Set market's color, size and style. You can customize these as you see fit
 		SimpleMarkerSymbol symbol = new SimpleMarkerSymbol(Color.BLUE,25, style);			
+		Graphic graphic = new Graphic(point, symbol,attributes,null);
+		_pointsGraphicsLayer.addGraphic(graphic);
+	}
+	
+	/**
+	 * Helper method that uses latitude/longitude points to programmatically 
+	 * draw a <code>SimpleMarkerSymbol</code> and adds the <code>Graphic</code> to map.
+	 * @param latitude
+	 * @param longitude
+	 * @param attributes
+	 * @param style You defined the style via the Enum <code>SimpleMarkerSymbol.STYLE</code>
+	 * @param color The color of the marker. E.g. Color.BLUE
+	 * @param size The size of the marker
+	 */
+	public void addGraphicLatLon(double latitude, double longitude, Map<String, Object> attributes, 
+			SimpleMarkerSymbol.STYLE style, int color, int size){
+		
+		Point latlon = new Point(longitude,latitude);		
+		
+		//Convert latlon Point to mercator map point.
+		Point point = (Point)GeometryEngine.project(latlon,SpatialReference.create(4326), _mapView.getSpatialReference());		
+		
+		//Set market's color, size and style. You can customize these as you see fit
+		SimpleMarkerSymbol symbol = new SimpleMarkerSymbol(color ,size, style);			
 		Graphic graphic = new Graphic(point, symbol,attributes,null);
 		_pointsGraphicsLayer.addGraphic(graphic);
 	}

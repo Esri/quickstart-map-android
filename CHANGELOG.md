@@ -1,5 +1,10 @@
 # quickstart-map-android - Changelog
 
+## Version 1.2.1 - June 11, 2013
+Added an overloaded method to addGraphicLatLon() to accomodate the ability to customize color and size of the graphic. It has the following signature:
+
+	addGraphicLatLon(double latitude, double longitude, Map<String, Object> attributes, SimpleMarkerSymbol.STYLE style, int color, int size)
+
 ## Version 1.2 - June 11, 2013
 Re-uploaded version 1.2. A permission error on my local machine prevented the correct files from being committed on June 5. All files 'should' be updated to the correct version. If something seems fishy let me know via the project comments. Special thanks to @elbarsal for catching the problem.
 
