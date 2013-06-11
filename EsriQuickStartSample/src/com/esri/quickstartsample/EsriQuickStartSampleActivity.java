@@ -14,7 +14,7 @@ import com.esri.quickstartsample.controller.EsriQuickStartActivityController;
 /**
  * 
  * @author Andy Gup
- * @version 1.1
+ * @version 1.2
  *
  */
 public class EsriQuickStartSampleActivity extends Activity {

@@ -56,7 +56,7 @@ import com.esri.core.tasks.ags.geocode.LocatorReverseGeocodeResult;
  * in your Activities.
  * 
  * @author Andy Gup
- * @version 1.1
+ * @version 1.2
  */
 public class EsriQuickStart extends MapView {
 	
@@ -96,7 +96,7 @@ public class EsriQuickStart extends MapView {
 	 * and basic graphics. It also has a built-in event bus to help you loosely couple the various components
 	 * in your Activities.
 	 * @author Andy Gup
-	 * @version 1.0
+	 * @version 1.2
 	 * @param activity A reference to the primary Activity where the map will be displayed
 	 * @param mapId id the mapView in your primary layout xml file, e.g. (R.id.map);
 	 */
@@ -539,6 +539,29 @@ public class EsriQuickStart extends MapView {
 	}
 	
 	/**
+	 * Helper method that uses latitude/longitude to center the map
+	 * @param latitude
+	 * @param longitude
+	 * @param scale Get info on scale at the map services REST endpoing. See MapType.getURL().
+	 * @param animated
+	 */
+	public void centerAt(double latitude, double longitude, Double scale, boolean animated){
+		Point latlon = new Point(longitude,latitude);		
+		
+		//Convert latlon Point to mercator map point.
+		Point point = (Point)GeometryEngine.project(latlon,SpatialReference.create(4326), _mapView.getSpatialReference());
+		_mapView.centerAt(point, animated);
+
+		if(scale == null){
+			_mapView.setScale(_DEFAULT_SCALE);
+		}
+		else{
+			_mapView.setScale(scale);
+		}		
+		
+	}
+	
+	/**
 	 * Helper method that displays a TOAST message. Default is TOAST.LENGTH_LONG.
 	 * @param message The message you wish to be displayed in TOAST.
 	 * @param toastLength (Optional) valid options are Toast.LENGTH_LONG or Toast.LENGTH_SHORT.
@@ -963,6 +986,28 @@ public class EsriQuickStart extends MapView {
 		return enabled;
 						
 	}	
+	
+	/**
+	 * Clear only the points graphic layer.
+	 */
+	public void clearPointsGraphicLayer(){
+		_pointsGraphicsLayer.removeAll();
+	}
+	
+	/**
+	 * Clear only the draw graphic layer
+	 */
+	public void clearDrawGraphicLayer(){
+		_drawGraphicsLayer.removeAll();
+	}
+	
+	/**
+	 * Clear graphics from all layers. Full reset.
+	 */
+	public void clearAllGraphics(){
+		_drawGraphicsLayer.removeAll();	
+		_pointsGraphicsLayer.removeAll();		
+	}
 	
 	/**
 	 * Overloaded pause method used to ensure the MapView used internally is paused correctly.

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.esri.quickstart"
-      android:versionCode="1"
-      android:versionName="1.0">
+      package="com.esri.quickstartsample"
+      android:versionCode="2"
+      android:versionName="1.2">
     <uses-sdk android:minSdkVersion="8" />
 
 
 <uses-feature android:glEsVersion="0x00020000" android:required="true"/> 
 
     <application android:icon="@drawable/ic_launcher" android:label="@string/app_name">
-        <activity android:name=".EsriQuickStartSampleActivity"
+        <activity android:name="com.esri.quickstartsample.EsriQuickStartSampleActivity"
                   android:label="@string/app_name"
                   android:configChanges="orientation">
             <intent-filter>
