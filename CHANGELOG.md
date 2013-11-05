@@ -1,5 +1,8 @@
 # quickstart-map-android - Changelog
 
+## Version 1.2.2 - Nov 5, 2013
+Updated to support ArcGIS Runtime SDK for Android v10.2. Minor changes to accommodate the update.
+
 ## Version 1.2.1 - June 11, 2013
 Added an overloaded method to addGraphicLatLon() to accomodate the ability to customize color and size of the graphic. It has the following signature:
 

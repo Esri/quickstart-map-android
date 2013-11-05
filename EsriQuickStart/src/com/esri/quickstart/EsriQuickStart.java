@@ -474,7 +474,7 @@ public class EsriQuickStart extends MapView {
 		
 		//Set market's color, size and style. You can customize these as you see fit
 		SimpleMarkerSymbol symbol = new SimpleMarkerSymbol(Color.BLUE,25, style);			
-		Graphic graphic = new Graphic(point, symbol,attributes,null);
+		Graphic graphic = new Graphic(point, symbol,attributes);
 		_pointsGraphicsLayer.addGraphic(graphic);
 	}
 	
@@ -498,7 +498,7 @@ public class EsriQuickStart extends MapView {
 		
 		//Set market's color, size and style. You can customize these as you see fit
 		SimpleMarkerSymbol symbol = new SimpleMarkerSymbol(color ,size, style);			
-		Graphic graphic = new Graphic(point, symbol,attributes,null);
+		Graphic graphic = new Graphic(point, symbol,attributes);
 		_pointsGraphicsLayer.addGraphic(graphic);
 	}
 	

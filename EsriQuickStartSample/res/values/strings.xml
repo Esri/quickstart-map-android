@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">EsriQuickStart</string>
+    <string name="app_name">EsriQuickStart2</string>
     <string name="map_choices">Choose One</string>
     <string name="draw_choices">Choose One</string>
     <string name="mainLabel_text">Single tap on map or enter address.</string>  
