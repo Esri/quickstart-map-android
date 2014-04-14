@@ -1,6 +1,11 @@
 quickstart-map-android
 ==================
 
+**Deprecated** As of April 2014, please start using the [maps-app-android](https://github.com/Esri/maps-app-android) repository. Is is designed to replace this quickstart with the latest software development patterns in the ArcGIS Runtime SDK for Android. 
+
+
+-------------------------
+
 A library, sample app and starter template for getting started with Esri's Android Runtime SDK.
 
 See the repo's wiki for additional details: https://github.com/Esri/quickstart-map-android/wiki
